@@ -15,9 +15,8 @@ class NumberResponse(BaseModel):
     digit_sum: int
     fun_fact: str
 
-# Helper functions
+# Helper functions (unchanged)
 def is_prime(n: int) -> bool:
-    """Check if a number is prime"""
     if n <= 1:
         return False
     if n <= 3:
@@ -32,7 +31,6 @@ def is_prime(n: int) -> bool:
     return True
 
 def is_perfect(n: int) -> bool:
-    """Check if a number is a perfect number"""
     if n <= 1:
         return False
     sum_divisors = 1
@@ -44,7 +42,6 @@ def is_perfect(n: int) -> bool:
     return sum_divisors == n
 
 def is_armstrong(n: int) -> bool:
-    """Check if a number is an Armstrong number"""
     if n < 0:
         return False
     num_str = str(n)
@@ -52,19 +49,15 @@ def is_armstrong(n: int) -> bool:
     return sum(int(digit) ** length for digit in num_str) == n
 
 def get_parity(n: int) -> str:
-    """Check if a number is even or odd"""
     return "even" if n % 2 == 0 else "odd"
 
 async def get_fun_fact(n: int) -> str:
-    """Fetch or generate a fun fact about a number"""
     if is_armstrong(n):
-        # Manually construct the fun fact for Armstrong numbers
         digits = [int(d) for d in str(n)]
         length = len(digits)
         explanation = " + ".join([f"{d}^{length}" for d in digits])
         return f"{n} is an Armstrong number because {explanation} = {n}"
     else:
-        # Fetch fun fact from Numbers API for non-Armstrong numbers
         try:
             async with httpx.AsyncClient() as client:
                 response = await client.get(f"http://numbersapi.com/{n}/math", timeout=3.0)
